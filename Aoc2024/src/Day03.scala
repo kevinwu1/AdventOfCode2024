@@ -1,10 +1,23 @@
 import scala.util.chaining.scalaUtilChainingOps
 import scala.util.matching.Regex.Match
-
-object Day3_2 {
+object Day03 extends AocDay {
   def main(args: Array[String]): Unit = {
-    val input = os.read(os.pwd / "input" / "day3input.txt")
+    run()
+  }
 
+  override def part1(input: String): String = {
+    val regex = raw"mul\((\d{1,3}),(\d{1,3})\)".r
+    (
+      for (thematch <- regex.findAllIn(input).matchData)
+        yield (1 to thematch.groupCount)
+          .map(thematch.group)
+          .map(_.toInt)
+          .ensuring(_.length == 2)
+          .reduce(_ * _)
+    ).sum.toString
+  }
+
+  override def part2(input: String): String = {
     input
       .split(raw"do\(\)")
       .map(section => {
@@ -25,7 +38,6 @@ object Day3_2 {
           .sum
       })
       .sum
-      .pipe(println)
+      .toString()
   }
-
 }
