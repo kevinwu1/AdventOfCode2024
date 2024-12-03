@@ -1,4 +1,5 @@
 .bloop
 .metals
 .vscode
+.bsp
 out
