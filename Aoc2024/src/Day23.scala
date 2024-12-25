@@ -1,6 +1,8 @@
 object Day23 extends AocDay {
 
   import scala.util.chaining.scalaUtilChainingOps
+
+  import scala.collection.parallel.CollectionConverters._
   def main(args: Array[String]): Unit = {
     run()
   }
@@ -13,7 +15,7 @@ object Day23 extends AocDay {
     }
     val known = connections.keySet.toVector
     (for (
-      a <- known;
+      a <- known.par;
       b <- known;
       c <- known;
       if (a < b && b < c)
@@ -51,7 +53,7 @@ object Day23 extends AocDay {
     Iterator.iterate((startingCliques, true)) {
       case (cliques, cancontinue) => {
         val newcliques = for (
-          node <- nodes;
+          node <- nodes.par;
           clique <- cliques
           if (canAddToClique(clique, node))
         ) yield {
@@ -60,7 +62,7 @@ object Day23 extends AocDay {
         if (newcliques.size == 0) {
           (cliques, false)
         } else 
-          (newcliques, true)
+          (newcliques.seq, true)
       }
     }
     .find(!_._2)
